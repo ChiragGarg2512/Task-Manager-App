@@ -1,36 +1,15 @@
 const express = require("express");
 require("./db/mongoose");
-const User = require("./models/users.js");
 const Task = require("./models/tasks");
+const userRouter = require("./routes/userRoutes");
+const taskRouter = require("./routes/taskRoutes");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 
 app.use(express.json());
-
-app.post("/users", (req, res) => {
-  const user = new User(req.body);
-  user
-    .save()
-    .then(() => {
-      res.send(user);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
-
-app.post("/tasks", (req, res) => {
-  const task = new Task(req.body);
-  task
-    .save()
-    .then(() => {
-      res.send(task);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
+app.use(userRouter);
+app.use(taskRouter)
 
 app.listen(port, () => {
   console.log(`Server is up and running on port ${port}`);
